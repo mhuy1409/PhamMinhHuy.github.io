@@ -1,0 +1,99 @@
+[
+{
+	"uri": "//localhost:1313/4-s3log/4.1-updateiamrole/",
+	"title": "Create AMAZON EFS",
+	"tags": [],
+	"description": "",
+	"content": " Search for and select EFS -\u0026gt; Create file system Name it Workshop-EFS Select your Workshop VPC: Workshop-VPC Click Customize Step 1: File system type: select Regional Transition into IA: select 30 days Transition into Archive: select None Throughput mode: select Bursting Click Next Step 2: Network Access:\nSelect VPC: Workshop-VPC Create Mount Target for ap-southeast-1a with corresponding subnet Attach Security Group allowing port 2049 Step 3: File system policy: keep default and click Next\nStep 4: Review and Create: review settings and click Create file system\n"
+},
+{
+	"uri": "//localhost:1313/2-prerequiste/2.1-createec2/",
+	"title": "Create VPC and EC2",
+	"tags": [],
+	"description": "",
+	"content": "1. Create VPC Go to AWS Console → Search for VPC → Create VPC. Select VPC only.\nEnter:\nIPv4 CIDR block: 10.0.0.0/16 Name tag: Workshop-VPC Click Create VPC. In the VPC menu, select Subnets → Create subnet: Name: Public-Subnet VPC: Workshop-VPC AZ: Choose any CIDR block: 10.0.1.0/24 Click Add new subnet:\nName: Private-Subnet CIDR block: 10.0.2.0/24 Click Create subnet.\nGo to Internet Gateways → Create internet gateway: Name: Workshop-IGW Click Create. Select Attach to VPC → Workshop-VPC. Go to Route tables: Select the route table for Public-Subnet → Edit routes → Add route Destination: 0.0.0.0/0 Target: Select Internet Gateway → Workshop-IGW. 2. Create EC2 Go to EC2 → Launch instance: Name: Workshop-EC2 AMI: Choose Amazon Linux 2023 (kernel-6.1) Instance type: t2.micro (Free tier) Key pair: Choose an existing key pair or create a new one (for SSH access) Network settings:\nVPC: Select the VPC you created Subnet: Choose Public Subnet (for SSH and package downloads) Auto-assign public IP: Enable Security Group:\nCreate a new one or select an existing one, ensuring at least:\nSSH: TCP 22 (allow from your IP) NFS: TCP 2049 inbound from the VPC or your IP Click Launch instance.\nContents Create VPC and EC2 Create IAM Role "
+},
+{
+	"uri": "//localhost:1313/1-introduce/",
+	"title": "Introduction",
+	"tags": [],
+	"description": "",
+	"content": "AWS Storage Gateway is a service that helps connect on-premises environments to the AWS cloud easily and securely. This allows you to extend or migrate file storage to AWS without disrupting current operations.\nIn this workshop, you will learn how to:\nSet up a File Gateway to synchronize file data to Amazon S3. Mount a file share on an on-premises server or EC2 instance for direct data access. Utilize Amazon EFS as a flexible, scalable file storage solution in AWS. Monitor the system through Amazon CloudWatch to ensure stable operations. Benefits of using Storage Gateway and EFS:\nMaintain your existing workflows while extending storage capabilities to the cloud. Enhance security and centralized management with AWS IAM and CloudWatch. Reduce costs and improve data management efficiency. Through this workshop, you will gain practical knowledge to deploy a modern, efficient, and secure file storage solution on the AWS platform.\n"
+},
+{
+	"uri": "//localhost:1313/",
+	"title": "Session Management",
+	"tags": [],
+	"description": "",
+	"content": "File Server Migration with Storage Gateway and EFS Overview In this lab, we will migrate data from a traditional on-premises file server to the AWS cloud platform using AWS Storage Gateway combined with Amazon EFS and Amazon S3. This approach leverages cloud benefits such as flexible scalability, high security, and easy data management.\nYou will learn how to:\nDeploy and configure AWS Storage Gateway as a File Gateway. Create and configure Amazon EFS to store network file system data. Connect on-premises servers or EC2 instances to the Storage Gateway via NFS/SMB protocols. Automatically synchronize data between on-premises and AWS S3/EFS. Test and monitor the data synchronization process. Lab Objectives Understand the architecture and operation of Storage Gateway and EFS. Practice configuring the AWS environment suitable for file server migration. Ensure safe and efficient data synchronization from on-premises to the cloud. Apply monitoring and management techniques using CloudWatch. Contents Introduction Lab Environment Preparation Create AWS Storage Gateway Create Amazon EFS and S3 Mount File Share on On-premises Machine and Test Synchronization Testing Clean Up Resources "
+},
+{
+	"uri": "//localhost:1313/2-prerequiste/2.2-createiamrole/",
+	"title": "Create IAM Role",
+	"tags": [],
+	"description": "",
+	"content": "1. Create IAM Role Go to IAM (Identity and Access Management).\nSelect Roles \u0026gt; Create role.\nSelect Trusted entity type as AWS service.\nChoose the use case as EC2 and click Next.\nSearch for and select the policy named AmazonS3FullAccess.\nClick Next.\nClick Next: Review.\nName the role EC2S3AccessRole.\nClick Create role.\n2. Attach IAM Role to EC2 Instance Go to EC2 console.\nSelect Instances \u0026gt; Select the instance you are using.\nGo to the Actions tab \u0026gt; Security \u0026gt; Modify IAM Role.\nSelect the role you just created EC2S3AccessRole.\nClick Save.\n3. SSH Connection: ssh -i mykey.pem ec2-user@\u0026lt;Public-IP\u0026gt; Public-IP is the public IP address of the EC2 instance you are connecting to.\nmykey.pem is the key you used or created for EC2.\nInstall Samba (simulate SMB file server):\nsudo yum update -y\rsudo yum install samba samba-client -y\rsudo mkdir /srv/files\rsudo dd if=/dev/zero of=/srv/files/testfile1 bs=1M count=50\rsudo dd if=/dev/zero of=/srv/files/testfile2 bs=1M count=100 Content Create VPC and EC2 Create IAM Role "
+},
+{
+	"uri": "//localhost:1313/4-s3log/4.2-creates3bucket/",
+	"title": "Create S3 Bucket",
+	"tags": [],
+	"description": "",
+	"content": "1. Create S3 Bucket Go to AWS Management Console → S3 → Create bucket.\nConfiguration:\nBucket name: workshop-s3-gateway\n(This name must match the Storage Gateway configuration later.)\nAWS Region: Asia Pacific (Singapore) ap-southeast-1 (same region as Storage Gateway).\nBucket type: select General purpose.\nObject Ownership: select Bucket owner enforced (ACLs disabled).\nBlock Public Access: Enable Block all public access (recommended for security).\nVersioning: select Disable (unless you want to keep multiple versions).\nBucket Key: select Enable.\nClick Create bucket.\n2. Create File Share Go back to Storage Gateway → select the gateway Workshop-S3-Gateway. Select WS-SG then click Create file share.\nGateway: WS-SG\nAmazon S3 bucket: select workshop-s3-gateway.\nAccess protocol: choose NFS or SMB (for Windows, choose SMB).\nClick Create file share.\n"
+},
+{
+	"uri": "//localhost:1313/2-prerequiste/",
+	"title": "Lab Environment Preparation",
+	"tags": [],
+	"description": "",
+	"content": "The overall architecture after you complete this step will be as follows:\nContents Create VPC and EC2 Create IAM Role "
+},
+{
+	"uri": "//localhost:1313/3-accessibilitytoinstances/",
+	"title": "Create AWS Storage Gateway",
+	"tags": [],
+	"description": "",
+	"content": " Go to AWS Storage Gateway → Create gateway. Name it: WS-SG\nChoose:\nGateway type: Amazon S3 File Gateway Host platform: Amazon EC2 or on-premises VM. Select the VPC/Subnet same as EFS and S3. Get the Activation Key → Activate Gateway. Connect to AWS Gateway connection options: Choose IP address.\nEndpoint options: select Publicly accessible to allow Storage Gateway to communicate with AWS over the internet.\nClick Next to proceed to the next step.\nIn the next step, review and select Activate gateway. Step 4: Configure gateway For CloudWatch log group, select Create a new log group. For CloudWatch alarms, select Create Storage Gateway\u0026rsquo;s recommended alarms. Click Configure. "
+},
+{
+	"uri": "//localhost:1313/4-s3log/",
+	"title": "Create Amazon EFS and Amazon S3 Bucket",
+	"tags": [],
+	"description": "",
+	"content": "Contents: Create AMAZON EFS Create S3 Bucket "
+},
+{
+	"uri": "//localhost:1313/5-portfwd/",
+	"title": "Mount File Share on On-Premises Machine and Test Synchronization",
+	"tags": [],
+	"description": "",
+	"content": "Mount File Share Create a mount directory on your Linux machine: sudo mkdir -p /mnt/workshop Mount NFS share from AWS Storage Gateway: sudo mount -t nfs 10.0.2.129:/workshop-s3-gateway /mnt/workshop Replace Gateway-IP with the private IP address of your gateway.\nCheck if the mount is successful: df -h /mnt/workshop The output showing the filesystem and size indicates the mount was successful.\nCreate a test file in the mount directory: sudo touch /mnt/workshop/testfile.txt\rsudo ls -l /mnt/workshop/ The file testfile.txt will be created and displayed in the shared directory.\nCheck the file on the Amazon S3 bucket backend: Go to AWS Console → S3 → Open the bucket workshop-s3-gateway.\nVerify that the file testfile.txt has been synchronized to S3.\nMonitor Storage Gateway with CloudWatch Step 1 – Access Metrics\nGo to AWS Console → CloudWatch → All metrics.\nSelect the namespace AWS/StorageGateway.\nStep 2 – Create an Alarm to monitor CachePercentUsed\nSelect the metric CachePercentUsed → Select metric → Create alarm.\nConditions:\nThreshold type: select Static\nWhenever: select Greater than\nThreshold value: set to 80\nConfigure actions:\nAlarm state trigger: leave default as In alarm.\nSend a notification to the following SNS topic:\nIf you already have an SNS topic, select it under Select an existing SNS topic.\nIf not, choose Create new topic to create one.\nEnter the name StorageGatewayAlerts.\nEnter the email address to receive notifications.\nAfter creating or selecting the topic, remember to confirm the email subscription (AWS will send an email requesting you to click a confirmation link).\nStep 3 – Create an Alarm to monitor FilesFailingUpload\nOpen Amazon CloudWatch → Select Alarms → Create Alarm.\nChoose Select metric → Choose namespace StorageGateway → File Share Metrics.\nSelect FilesFailingUpload with the corresponding ShareId.\nClick Select metric.\nSet alarm conditions: Threshold type: select Static\nWhenever FilesFailingUpload is Greater than 0.\nClick Next → Configure alarm actions (choose SNS topic to receive notifications via email or SMS). Name the alarm StorageGateway_FilesFailingUpload_Alarm.\nReview and click Create alarm.\n"
+},
+{
+	"uri": "//localhost:1313/6-cleanup/",
+	"title": "Testing",
+	"tags": [],
+	"description": "",
+	"content": "1. Test Mounting NFS from Storage Gateway Run this bash command via SSH: mount | grep /mnt/workshop This means:\nThe EC2 instance is connected to Storage Gateway via NFS. You can read/write files inside /mnt/workshop. Any file operations in this directory will sync to S3 via Storage Gateway. Check the mounted directory: ls -l /mnt/workshop 2. Test Reading and Writing Files from EC2 to Storage Gateway Create a new file: echo \u0026#34;Hello from EC2\u0026#34; | sudo tee /mnt/workshop/filetest1_from_ec2.txt Check the newly created file: ls -l /mnt/workshop/filetest1_from_ec2.txt\rcat /mnt/workshop/filetest1_from_ec2.txt 3. Test Syncing Storage Gateway Data with S3 Bucket Check in the AWS S3 console under bucket workshop-s3-gateway to ensure the file filetest1_from_ec2.txt appears.\n4. Test Direct Upload from EC2 to S3 (using IAM Role) Create a file: echo \u0026#34;Hello direct S3 upload\u0026#34; \u0026gt; filetest1_s3.txt Upload to S3: aws s3 cp filetest1_s3.txt s3://workshop-s3-gateway/ Verify the uploaded file: aws s3 ls s3://workshop-s3-gateway/filetest1_s3.txt 5. Test Writing File from On-Premises Machine to Storage Gateway Create a test file: echo \u0026#34;Hello from on-prem\u0026#34; \u0026gt; /mnt/workshop/filetest1_from_onprem.txt Check this file on EC2: ls -l /mnt/workshop/filetest1_from_onprem.txt\rcat /mnt/workshop/filetest1_from_onprem.txt 6. Test Deleting Files on Storage Gateway and Syncing to S3 Delete the file on EC2: sudo rm /mnt/workshop/filetest4.txt Check on the S3 bucket if the file is deleted: aws s3 ls s3://workshop-s3-gateway/filetest4.txt If the file is missing, it means deletion synced correctly.\n7. Test Creating and Accessing Files on EFS Mount EFS: sudo mount -t nfs4 -o nfsvers=4.1 fs-09848ebfb417f3ee3.efs.ap-southeast-1.amazonaws.com:/ /mnt/efs Create a test file: echo \u0026#34;Hello from EFS\u0026#34; | sudo tee /mnt/efs/testfile_efs.txt Check the file: ls -l /mnt/efs/testfile_efs.txt\rcat /mnt/efs/testfile_efs.txt 6. Conclusion Successfully deployed AWS Storage Gateway connecting On-premises File Server to AWS S3/EFS. The system ensures safe, manageable, and monitored data synchronization via CloudWatch. "
+},
+{
+	"uri": "//localhost:1313/7-cleanup/",
+	"title": "Clean Up Resources",
+	"tags": [],
+	"description": "",
+	"content": "Instructions to clean up all resources from this workshop to avoid incurring charges.\nI will follow the reverse order of creation to avoid errors due to dependencies between services.\n1. Unmount EFS on EC2 Instances Before deleting EFS, unmount it on EC2 instances:\nsudo umount /mnt/efs If multiple EC2s have the mount, do this on each EC2.\n2. Delete Amazon EFS Go to AWS Console → EFS. Select the file system Workshop-EFS. Click Delete: Enter the ID to confirm deletion. Wait a few minutes for EFS to be deleted.\n3. Remove Storage Gateway Go to AWS Storage Gateway → File shares:\nDelete the file share workshop-s3-gateway first.\nThen go back to Gateways → select gateway WS-SG → Delete gateway.\nTerminate the EC2 instance running Storage Gateway (if deployed via EC2):\nGo to EC2 → Instances → select the gateway instance → Terminate.\n4. Delete S3 Bucket Open S3 → Select bucket workshop-s3-gateway.\nChoose Empty (Empty bucket) → Confirm by typing the bucket name → Click Empty.\nAfter emptying, return to Bucket list → Select bucket → Delete → Type bucket name → Delete bucket.\n5. Delete EC2 Go to EC2 → Instances → select Workshop-EC2.\nTerminate the instance.\nIf you no longer need the key pair → go to Key Pairs → delete the created key pair.\n6. Delete VPC \u0026amp; Related Components Go to EC2 → Security Groups:\nDelete the security groups created for the workshop.\nGo to VPC → Subnets:\nDelete both Public and Private subnets.\nGo to VPC → Route Tables:\nDelete the custom route table.\nGo to VPC → Internet Gateways:\nDetach the IGW Workshop-IGW from the VPC.\nDelete Workshop-IGW.\nFinally, delete the VPC Workshop-VPC.\n7. Delete IAM Role Go to IAM → Roles.\nDelete the IAM Role you created for EC2/Storage Gateway in this workshop.\nResult: After completing all the above steps, all resources from the workshop will be deleted, and you will no longer incur storage or compute charges.\n"
+},
+{
+	"uri": "//localhost:1313/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "//localhost:1313/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]

@@ -1,0 +1,99 @@
+[
+{
+	"uri": "//localhost:1313/vi/1-introduce/",
+	"title": "Giới thiệu",
+	"tags": [],
+	"description": "",
+	"content": "AWS Storage Gateway là dịch vụ giúp kết nối môi trường on-premises với đám mây AWS một cách dễ dàng và an toàn. Qua đó, bạn có thể mở rộng hoặc di chuyển lưu trữ file lên AWS mà không làm gián đoạn hoạt động hiện tại.\nTrong Workshop này, bạn sẽ học cách:\nThiết lập File Gateway để đồng bộ dữ liệu file lên Amazon S3. Mount file share trên máy chủ tại chỗ hoặc EC2 để truy cập dữ liệu trực tiếp. Tận dụng Amazon EFS như giải pháp lưu trữ file linh hoạt, mở rộng trong AWS. Giám sát hệ thống qua Amazon CloudWatch để đảm bảo hoạt động ổn định. Lợi ích của việc sử dụng Storage Gateway và EFS:\nGiữ nguyên quy trình làm việc hiện tại nhưng mở rộng khả năng lưu trữ trên đám mây. Tăng tính bảo mật và quản lý tập trung bằng AWS IAM và CloudWatch. Giảm chi phí và tăng hiệu quả quản lý dữ liệu. Qua Workshop, bạn sẽ có kiến thức thực tiễn để triển khai giải pháp lưu trữ file hiện đại, hiệu quả và an toàn trên nền tảng AWS.\n"
+},
+{
+	"uri": "//localhost:1313/vi/",
+	"title": "Session Management",
+	"tags": [],
+	"description": "",
+	"content": "File Server Migration với Storage Gateway và EFS Tổng quan Trong bài lab này, chúng ta sẽ thực hiện di chuyển dữ liệu từ hệ thống file server truyền thống (on-premises) lên nền tảng đám mây AWS bằng cách sử dụng AWS Storage Gateway kết hợp với Amazon EFS và Amazon S3. Việc này giúp tận dụng ưu điểm của đám mây như khả năng mở rộng linh hoạt, bảo mật cao và dễ dàng quản lý dữ liệu.\nBạn sẽ học cách:\nTriển khai và cấu hình AWS Storage Gateway dưới dạng File Gateway. Tạo và cấu hình Amazon EFS để lưu trữ dữ liệu file system dạng mạng. Kết nối máy chủ on-premises hoặc EC2 với Storage Gateway qua giao thức NFS/SMB. Đồng bộ dữ liệu tự động giữa on-premises và AWS S3/EFS. Kiểm thử và giám sát quá trình đồng bộ dữ liệu. Mục tiêu bài lab Hiểu rõ kiến trúc và cách hoạt động của Storage Gateway và EFS. Thực hành cấu hình môi trường AWS phù hợp cho file server migration. Đảm bảo dữ liệu được đồng bộ an toàn và hiệu quả từ on-premises lên đám mây. Áp dụng các kỹ thuật giám sát và quản lý dữ liệu sử dụng CloudWatch. Nội dung Giới thiệu Chuẩn bị môi trường Lab Tạo AWS Storage Gateway Tạo Amazon EFS và S3 Mount File Share trên máy on-premises và kiểm thử đồng bộ Kiểm thử Dọn dẹp tài nguyên "
+},
+{
+	"uri": "//localhost:1313/vi/4-s3log/4.1-updateiamrole/",
+	"title": "Tạo AMAZON EFS",
+	"tags": [],
+	"description": "",
+	"content": " Tìm và chọn vào EFS -\u0026gt; Create file system Đặt tên Workshop-EFS Chọn VPC Wordshop của bạn: Workshop-VPC Nhấn vào Customize Ở bước 1: File system type chọn Regional Transition into IA chọn 30 days Transition into Archive chọn None Throughput mode chọn Bursting. Bấm Next Bước 2: Network Access:\nChọn VPC: Workshop-VPC Tạo Mount Target cho ap-southeast-1a với subnet tương ứng. Gắn Security Group mở port 2049. Bước 3. File system policy: để mặc định và bấm Next\nBước 4. Review and Create kiểm tra rồi bấm Create file system.\n"
+},
+{
+	"uri": "//localhost:1313/vi/2-prerequiste/2.1-createec2/",
+	"title": "Tạo VPC và EC2",
+	"tags": [],
+	"description": "",
+	"content": "1. Tạo VPC 1.Vào AWS Console → Tìm VPC → Create VPC.\nChọn VPC only.\nNhập:\nIPv4 CIDR block: 10.0.0.0/16 Name tag: Workshop-VPC Bấm Create VPC. Trong menu VPC, chọn Subnets → Create subnet: Name: Public-Subnet VPC: Workshop-VPC AZ: Chọn bất kỳ CIDR block: 10.0.1.0/24 Bấm Add new subnet:\nName: Private-Subnet CIDR block: 10.0.2.0/24 Bấm Create subnet.\nVào Internet Gateways → Create internet gateway: Name: Workshop-IGW Bấm Create. Chọn Attach to VPC → Workshop-VPC. Vào Route tables: Chọn route table của Public-Subnet → Edit routes → Add route Destination: 0.0.0.0/0 Target: Chọn Internet Gateway → Workshop-IGW. 2. Tạo EC2 Vào EC2 → Launch instance: Name: Workshop-EC2. AMI: Chọn Amazon Linux 2023 (kernel-6.1). Instance type: t2.micro (Free tier). Key pair: Chọn key pair có sẵn hoặc tạo mới (để SSH vào). Network settings:\nVPC: Chọn VPC mà bạn đã tạo. Subnet: Chọn Public Subnet (để SSH và tải gói dễ). Auto-assign public IP: Enable. Security Group:\nTạo mới hoặc chọn sẵn, cần mở ít nhất:\nSSH: TCP 22 (cho phép từ IP của bạn) NFS TCP 2049 inbound từ VPC hoặc IP bạn Nhấn Launch instance.\nNội dung Tạo VPC và EC2 Tạo IAM Role "
+},
+{
+	"uri": "//localhost:1313/vi/2-prerequiste/",
+	"title": "Chuẩn bị Môi trường Lab",
+	"tags": [],
+	"description": "",
+	"content": "Tổng quan kiến trúc sau khi các bạn hoàn tất bước này sẽ như sau:\nNội dung Tạo VPC và EC2 Tạo IAM Role "
+},
+{
+	"uri": "//localhost:1313/vi/2-prerequiste/2.2-createiamrole/",
+	"title": "Tạo IAM Role",
+	"tags": [],
+	"description": "",
+	"content": "1. Tạo IAM Role Vào IAM (Identity and Access Management).\nChọn Roles \u0026gt; Create role.\nChọn loại Trusted entity là AWS service.\nChọn use case là EC2 rồi nhấn Next\nTìm kiếm và chọn policy có tên AmazonS3FullAccess. Nhấn Next.\nNhấn Next: Review.\nĐặt tên role EC2S3AccessRole.\nNhấn Create role.\n2. Gán IAM Role vào EC2 Instance Vào EC2 console.\nChọn Instances \u0026gt; Chọn instance bạn đang dùng.\nChọn tab Actions \u0026gt; Security \u0026gt; Modify IAM Role.\nChọn role bạn vừa tạo EC2S3AccessRole\nNhấn Save.\n3. Kết nối SSH: ssh -i mykey.pem ec2-user@\u0026lt;Public-IP\u0026gt; Public-IP là địa chỉ IP công khai của máy chủ EC2 bạn đang kết nối. mykey.pem là khóa bạn đã sử dụng hoặc tạo EC2.\nCài Samba (mô phỏng file server SMB):\nsudo yum update -y\rsudo yum install samba samba-client -y\rsudo mkdir /srv/files\rsudo dd if=/dev/zero of=/srv/files/testfile1 bs=1M count=50\rsudo dd if=/dev/zero of=/srv/files/testfile2 bs=1M count=100\rNội dung Tạo VPC và EC2 Tạo IAM Role "
+},
+{
+	"uri": "//localhost:1313/vi/4-s3log/4.2-creates3bucket/",
+	"title": "Tạo S3 Bucket",
+	"tags": [],
+	"description": "",
+	"content": "1. Tạo S3 Bucket Vào AWS Management Console → S3 → Create bucket. Cấu hình:\nBucket name: workshop-s3-gateway (Tên này cần khớp với phần cấu hình Storage Gateway sau này.)\nAWS Region: Asia Pacific (Singapore) ap-southeast-1 (trùng region của Storage Gateway).\nBucket type chọn General purpose.\nObject Ownership chọn Bucket owner enforced (ACLs disabled).\nBlock Public Access Bật Block all public access (khuyến nghị để an toàn).\nVersioning chọn Disable (trừ khi muốn lưu nhiều phiên bản).\nBucket Key chọn Enable.\nBấm Create bucket.\n2. Tạo File Share Quay lại Storage Gateway → chọn gateway Workshop-S3-Gateway. Chọn vào WS-SG sau đó ấn vào Create file share.\nGateway: WS-SG\nAmazon S3 bucket chọn workshop-s3-gateway.\nAccess protocol: Chọn NFS hoặc SMB (Windows nên chọn SMB).\nBấm Create file share.\n"
+},
+{
+	"uri": "//localhost:1313/vi/3-accessibilitytoinstances/",
+	"title": "Tạo AWS Storage Gateway",
+	"tags": [],
+	"description": "",
+	"content": " Vào AWS Storage Gateway → Create gateway. Đặt tên: WS-SG Chọn:\nGateway type: Amazon S3 File Gateway Host platform: Amazon EC2 hoặc on-premises VM. Chọn VPC/Subnet giống EFS và S3. Lấy Activation Key → Activate Gateway. Connect to AWS Gateway connection options Chọn IP address.\nEndpoint options: chọn Publicly accessible: cho phép Storage Gateway giao tiếp với AWS qua internet.\nNhấn Next để sang bước tiếp theo.\nỞ bước tiếp theo kiểm tra và chọn Activate gateway Bước 4 Configure gateway CloudWatch log group chọn Create a new log group CloudWatch alarms chọn Create Storage Getaway\u0026rsquo;s recommended alarms Ấn Configure "
+},
+{
+	"uri": "//localhost:1313/vi/4-s3log/",
+	"title": "Tạo Amazon EFS và S3",
+	"tags": [],
+	"description": "",
+	"content": "Nội dung: Tạo AMAZON EFS Tạo S3 Bucket "
+},
+{
+	"uri": "//localhost:1313/vi/5-portfwd/",
+	"title": "Mount File Share trên máy on-premises và kiểm thử đồng bộ",
+	"tags": [],
+	"description": "",
+	"content": "Mount File Share Tạo thư mục mount trên máy Linux: sudo mkdir -p /mnt/workshop Mount NFS share từ AWS Storage Gateway: sudo mount -t nfs 10.0.2.129:/workshop-s3-gateway /mnt/workshop Thay Gateway-IP bằng địa chỉ IP private của gateway.\nKiểm tra mount có thành công hay không: df -h /mnt/workshop Kết quả hiển thị filesystem và dung lượng cho thấy mount đã thành công.\nTạo file thử nghiệm trên thư mục mount: sudo touch /mnt/workshop/testfile.txt\rsudo ls -l /mnt/workshop/ File testfile.txt sẽ được tạo và hiển thị trong thư mục chia sẻ.\nKiểm tra file trên Amazon S3 bucket backend: Vào AWS Console → S3 → Mở bucket workshop-s3-gateway.\nKiểm tra file testfile.txt đã được đồng bộ lên S3 chưa.\nGiám sát Storage Gateway bằng CloudWatch Bước 1 – Truy cập Metrics\nVào AWS Console → CloudWatch → All metrics.\nChọn namespace AWS/StorageGateway.\nBước 2– Tạo Alarm giám sát CachePercentUsed\nChọn metric CachePercentUsed → Select metric → Create alarm.\nĐiều kiện:\nThreshold type chọn Static\nWhenever chọn Greater than\nThreshold value chọn 80\nConfigure actions:\nAlarm state trigger: Để mặc định là In alarm.\nSend a notification to the following SNS topic:\nNếu bạn đã có SNS topic chọn từ Select an existing SNS topic.\nNếu chưa có, chọn Create new topic để tạo topic mới.\nNhập tên StorageGatewayAlerts.\nNhập email để nhận thông báo.\nSau khi tạo hoặc chọn xong, nhớ xác nhận đăng ký email (AWS sẽ gửi email yêu cầu bạn click link xác nhận).\nBước 3 – Tạo Alarm giám sát FilesFailingUpload\nMở Amazon CloudWatch → Chọn Alarms → Create Alarm.\nChọn Select metric → Chọn namespace StorageGateway → File Share Metrics.\nChọn FilesFailingUpload với ShareId tương ứng.\nNhấn Select metric\nThiết lập điều kiện alarm: Threshold type chọn Static\nWhenever FilesFailingUpload is Greater than 0.\nNhấn Next → Cấu hình hành động cảnh báo (chọn SNS topic để nhận thông báo qua email hoặc SMS). Đặt tên alarm StorageGateway_FilesFailingUpload_Alarm.\nXem lại và chọn Create alarm.\n"
+},
+{
+	"uri": "//localhost:1313/vi/6-cleanup/",
+	"title": "Kiểm thử",
+	"tags": [],
+	"description": "",
+	"content": "1. Kiểm thử Mount NFS của Storage Gateway Nhập đoạn bash này vào SSH. mount | grep /mnt/workshop Điều này nghĩa là:\nEC2 đã kết nối được tới Storage Gateway qua NFS Bạn có thể thao tác đọc/ghi file trong /mnt/workshop Các thao tác file bạn thực hiện trong thư mục này sẽ đồng bộ với S3 thông qua Storage Gateway Kiểm tra thư mục mount: ls -l /mnt/workshop 2. Kiểm thử đọc và ghi file từ EC2 lên Storage Gateway Tạo file mới: echo \u0026#34;Hello from EC2\u0026#34; | sudo tee /mnt/workshop/filetest1_from_ec2.txt Kiểm tra file vừa tạo: ls -l /mnt/workshop/filetest1_from_ec2.txt\rcat /mnt/workshop/filetest1_from_ec2.txt 3. Kiểm thử đồng bộ dữ liệu Storage Gateway với S3 Bucket Kiểm tra trong AWS S3 console bucket workshop-s3-gateway, đảm bảo file filetest1_from_ec2.txt đã xuất hiện.\n4. Kiểm thử upload file trực tiếp từ EC2 lên S3 (bằng IAM Role) Tạo file: echo \u0026#34;Hello direct S3 upload\u0026#34; \u0026gt; filetest1_s3.txt Upload lên S3: aws s3 cp filetest1_s3.txt s3://workshop-s3-gateway/ Kiểm tra file đã upload: aws s3 ls s3://workshop-s3-gateway/filetest1_s3.txt 5. Kiểm thử ghi file từ máy on-premise lên Storage Gateway Tạo file test: echo \u0026#34;Hello from on-prem\u0026#34; \u0026gt; /mnt/workshop/filetest1_from_onprem.txt Kiểm tra file này có trên EC2: ls -l /mnt/workshop/filetest1_from_onprem.txt\rcat /mnt/workshop/filetest1_from_onprem.txt 6. Kiểm thử xóa file trên Storage Gateway và đồng bộ lên S3 Xóa file trên EC2: sudo rm /mnt/workshop/filetest4.txt Kiểm tra trên bucket S3 file này đã bị xóa chưa: aws s3 ls s3://workshop-s3-gateway/filetest4.txt Nếu file không còn thì đúng\n7. Kiểm thử tạo và truy cập file trên EFS Mount EFS: sudo mount -t nfs4 -o nfsvers=4.1 fs-09848ebfb417f3ee3.efs.ap-southeast-1.amazonaws.com:/ /mnt/efs Tạo file thử nghiệm: echo \u0026#34;Hello from EFS\u0026#34; | sudo tee /mnt/efs/testfile_efs.txt Kiểm tra file: ls -l /mnt/efs/testfile_efs.txt\rcat /mnt/efs/testfile_efs.txt 6. Kết luận Hoàn thành triển khai AWS Storage Gateway kết nối On-premises File Server tới AWS S3/EFS. Hệ thống đảm bảo dữ liệu được đồng bộ an toàn, dễ quản lý, giám sát qua CloudWatch. "
+},
+{
+	"uri": "//localhost:1313/vi/7-cleanup/",
+	"title": "Dọn dẹp tài nguyên",
+	"tags": [],
+	"description": "",
+	"content": "Hướng dẫn dọn dẹp toàn bộ tài nguyên của workshop này để tránh tốn phí. Mình sẽ đi theo đúng thứ tự ngược lại so với khi tạo, để không bị lỗi do phụ thuộc giữa các dịch vụ.\n1. Gỡ bỏ EFS trên các EC2 Trước khi xóa EFS, cần ngắt kết nối trên EC2:\nsudo umount /mnt/efs Nếu có nhiều EC2 cùng mount, làm trên từng EC2.\n2. Xóa Amazon EFS Vào AWS Console → EFS.\nChọn file system Workshop-EFS.\nẤn vào Delete:\nNhập ID xác nhận xóa\nĐợi vài phút để EFS xóa xong.\n3. Gỡ bỏ Storage Gateway Vào AWS Storage Gateway → File shares:\nXóa File Share workshop-s3-gateway trước.\nSau đó quay lại Gateways → chọn gateway WS-SG → Delete gateway.\nGỡ bỏ instance EC2 chạy Storage Gateway (nếu bạn triển khai bằng EC2):\nVào EC2→ Instances → chọn gateway instance → Terminate.\n4. Xóa S3 bucket Mở S3 → Chọn bucket workshop-s3-gateway.\nChọn Empty (Empty bucket) → Xác nhận bằng cách gõ tên bucket → Bấm Empty.\nSau khi trống, quay lại Bucket list → Chọn bucket → Delete → Gõ tên bucket → Delete bucket.\n5. Xóa EC2 Vào EC2 → Instances → chọn Workshop-EC2.\nTerminate.\nNếu không dùng key pair nữa → vào Key Pairs → xóa key pair vừa tạo.\n6. Xóa VPC \u0026amp; các thành phần Vào EC2 → Security Groups:\nXóa security group đã tạo cho workshop.\nVào VPC → Subnets:\nXóa cả Public và Private subnet.\nVào VPC → Route tables:\nXóa route table custom.\nVào VPC → Internet Gateways:\nDetach IGW Workshop-IGW khỏi VPC.\nXóa Workshop-IGW.\nCuối cùng, xóa VPC Workshop-VPC.\n7. Xóa IAM Role Vào IAM → Roles.\nXóa IAM Role bạn đã tạo cho EC2/Storage Gateway trong workshop.\nKết quả: Sau khi làm hết các bước trên, toàn bộ tài nguyên trong workshop sẽ bị xóa, bạn sẽ không bị tốn phí lưu trữ hay chạy máy chủ nữa.\n"
+},
+{
+	"uri": "//localhost:1313/vi/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "//localhost:1313/vi/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]
